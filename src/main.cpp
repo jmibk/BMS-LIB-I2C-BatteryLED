@@ -25,7 +25,7 @@ void loop() {
   batteryLED.setSOCenable(true);
   batteryLED.setSOC((millis()/1000)%100);
   batteryLED.compute();
-
+  Serial.println(batteryLED.getCommunicationErrorState());
   Serial.println("");
   delay(200);
   }

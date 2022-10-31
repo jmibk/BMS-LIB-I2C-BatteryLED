@@ -24,6 +24,7 @@ class BatteryLED {
         bool getSOC(void)                       {return _modules_data.soc;}
         void setLocate(bool value)              {_modules_data.locate = value;}
         bool getLocate(void)                    {return _modules_data.locate;}
+		bool getCommunicationErrorState(void)	{return _modules_data.commerror;}
         uint32_t getCRCerrors(void)             {return _modules_data.crcerrors;}
 
     private:
@@ -36,6 +37,7 @@ class BatteryLED {
         bool            soc_enable = false;                 //soc display enabled
         uint8_t         soc = 0;                            //soc value [0...100]
         bool            locate = false;                     //module locate function
+		bool			commerror = false;					//communication error
         uint32_t        crcerrors = 0;                      //crc communication errors since system start
     };
     modules_data_struct _modules_data;
