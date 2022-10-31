@@ -23,11 +23,11 @@ bool BatteryLED::compute(void) {
 	_modules_data.commerror = false;
 	
     //check module
-    //Serial.println("Check Module");
-    //Serial.println(_checkModule(I2C_ADDRESS_LED_MODULE));
+    Serial.println("Check Module");
+    Serial.println(_checkModule(I2C_ADDRESS_LED_MODULE));
 	
     //locate
-    //Serial.println("Locate");
+    Serial.println("Locate");
     if (_modules_data.locate)
         _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, true);
     else    
@@ -37,7 +37,7 @@ bool BatteryLED::compute(void) {
 		return false;
 		
     //soc enabled
-    //Serial.println("SOC Enable");
+    Serial.println("SOC Enable");
     if (_modules_data.soc_enable)
         _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, true);
     else    
