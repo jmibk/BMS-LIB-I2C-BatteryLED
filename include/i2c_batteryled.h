@@ -13,7 +13,7 @@ uses i2c channel 0
 class BatteryLED {
     public:
         BatteryLED(void);
-        void setBus(TwoWire bus)                {_i2c = bus;}
+        void setBus(TwoWire &bus)                {_i2c = &bus;}
         bool init(int pinSDA, int pinSCL, uint32_t speed);
         bool init(int pinSDA, int pinSCL);
         bool init(void); 
@@ -27,7 +27,7 @@ class BatteryLED {
         uint32_t getCRCerrors(void)             {return _modules_data.crcerrors;}
 
     private:
-        TwoWire _i2c = TwoWire(USED_I2C_HARDWARE);
+        TwoWire *_i2c;          //pointer to the wire lib: https://forum.arduino.cc/t/passing-an-i2c-object-to-a-class/617064/15
         bool _checkModule(byte i2cAddress);
         bool _writedata(int i2cAddress, byte i2cRegister, uint16_t data);
         uint16_t _readdata(int i2cAddress, byte i2cRegister);

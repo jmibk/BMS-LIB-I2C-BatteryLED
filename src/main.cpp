@@ -10,11 +10,14 @@ void setup() {
   Serial.println("Demo - Battery LED State over I2C");
  
   //init i2c
+  WIREBUS.begin(4, 17, 1000ul);
   batteryLED.setBus(WIREBUS);
+  /*
   if (batteryLED.init(4, 17))  //SDA, SCL
     Serial.println("LED module initialised");
   else
     Serial.println("LED module failed!");
+    */
   }
 
 void loop() {
