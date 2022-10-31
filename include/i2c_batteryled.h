@@ -20,8 +20,8 @@ class BatteryLED {
         bool compute(void);
         void setSOCenable(bool value)           {_modules_data.soc_enable = value;}
         bool getSOCenable(void)                 {return _modules_data.soc_enable;}
-        void setSOC(byte value)                 {_modules_data.soc = value;}
-        bool getSOC(void)                       {return _modules_data.soc;}
+        void setSOC(uint8_t value)             	{_modules_data.soc = value;}
+        uint8_t getSOC(void)                   	{return _modules_data.soc;}
         void setLocate(bool value)              {_modules_data.locate = value;}
         bool getLocate(void)                    {return _modules_data.locate;}
 		bool getCommunicationErrorState(void)	{return _modules_data.commerror;}

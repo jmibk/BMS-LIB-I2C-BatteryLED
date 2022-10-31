@@ -47,7 +47,8 @@ bool BatteryLED::compute(void) {
 		return false;
 		
     //soc
-    //Serial.println("SOC");
+    Serial.println("SOC");
+	Serial.println(_modules_data.soc);
     _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.soc);
 
 	if (_modules_data.commerror)
