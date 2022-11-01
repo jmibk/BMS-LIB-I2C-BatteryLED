@@ -24,6 +24,7 @@ void loop() {
   Serial.println("Send Data...");
   batteryLED.setSOCenable(true);
   batteryLED.setSOC((millis()/1000)%100);
+  batteryLED.setMaxIntensity(80);
   batteryLED.compute();
   Serial.println(batteryLED.getCommunicationErrorState());
   Serial.println("");

@@ -34,6 +34,8 @@ class BatteryLED {
 																}
         void setLocate(bool value)              			{_modules_data.locate = value;}
         bool getLocate(void)                    			{return _modules_data.locate;}
+		void setMaxIntensity(uint8_t value)             	{_modules_data.max_intensity = value;}
+        uint8_t getMaxIntensity(void)                   	{return _modules_data.max_intensity;}
 		bool getCommunicationErrorState(void)				{return _modules_data.communication;}
         uint32_t getCRCerrors(void)             			{return _modules_data.crcerrors;}
 
@@ -48,6 +50,7 @@ class BatteryLED {
         uint8_t         soc = 0;                            //soc value [0...100]
 		byte			charge_discharge_state = 0x00;		//0x00 = no charging, 0x01 = charging, 0x02 = discharging
         bool            locate = false;                     //module locate function
+		byte			max_intensity = 80;					//max intensity of led
 		bool			communication = true;				//communication with board
         uint32_t        crcerrors = 0;                      //crc communication errors since system start
     };

@@ -21,13 +21,8 @@ bool BatteryLED::init(void) {
 
 bool BatteryLED::compute(void) {
 	_modules_data.communication = true;
-	
-    //check module
-    //Serial.println("Check Module");
-    //Serial.println(_checkModule(I2C_ADDRESS_LED_MODULE));
-	
+		
     //locate
-    //Serial.println("Locate");
     if (_modules_data.locate)
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, true);
     else    
@@ -37,7 +32,6 @@ bool BatteryLED::compute(void) {
 	//	return false;
 		
     //soc enabled
-    //Serial.println("SOC Enable");
     if (_modules_data.soc_enable)
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, true);
     else    
@@ -47,13 +41,14 @@ bool BatteryLED::compute(void) {
 	//	return false;
 		
     //soc
-    //Serial.println("SOC");
     _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.soc);
 
 	//charging state
-	//Serial.println("Charging State");
 	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x07, _modules_data.charge_discharge_state);
-	
+
+	//max led intensity
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x08, _modules_data.max_intensity);
+
 	if (!_modules_data.communication)
 		return false;
 		
