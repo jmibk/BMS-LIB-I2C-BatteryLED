@@ -13,9 +13,6 @@ uses i2c channel 0
 enum chargeDischargeState {
     OFF, CHARGING, DISCHARGING  };
 
-  //ControlWinch(UP);
-}
-
 class BatteryLED {
     public:
         BatteryLED(void);
@@ -24,14 +21,15 @@ class BatteryLED {
         bool init(int pinSDA, int pinSCL);
         bool init(void); 
         bool compute(void);
-        void setSOCenable(bool value)           			_modules_data.soc_enable = value;}
+        void setSOCenable(bool value)           			{_modules_data.soc_enable = value;}
         bool getSOCenable(void)                 			{return _modules_data.soc_enable;}
         void setSOC(uint8_t value)             				{_modules_data.soc = value;}
         uint8_t getSOC(void)                   				{return _modules_data.soc;}
-		void setChargingState(chargeDischargeState value)	{if(value == CHARGING) _modules_data.charge_discharge_state = 0x01; 
+		void setChargingState(chargeDischargeState value)	{
+                                                            if(value == CHARGING) _modules_data.charge_discharge_state = 0x01; 
 																else if (value == DISCHARGING) _modules_data.charge_discharge_state = 0x02;
 																else _modules_data.charge_discharge_state = 0x00;
-																}
+															}
         void setLocate(bool value)              			{_modules_data.locate = value;}
         bool getLocate(void)                    			{return _modules_data.locate;}
 		void setMaxIntensity(uint8_t value)             	{_modules_data.max_intensity = value;}
