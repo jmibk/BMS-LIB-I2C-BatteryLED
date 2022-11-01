@@ -65,8 +65,8 @@ class BatteryLED {
 		void setMaxIntensity(uint8_t value)             	{_modules_data.data_max_intensity = value;}
         uint8_t getMaxIntensity(void)                   	{return _modules_data.data_max_intensity;}
 
-        void setStateColor(byte value)             	        {_modules_data.data_config_mode = value;}
-        byte getStateColor(void)                    		{return _modules_data.data_config_mode;}
+        void setStateColor(byte value)             	        {_modules_data.data_state_color = value;}
+        byte getStateColor(void)                    		{return _modules_data.data_state_color;}
 
         void setStateAnimation(byte value)             	    {_modules_data.data_state_animation = value;}
         byte getStateAnimation(void)                        {return _modules_data.data_state_animation;}
