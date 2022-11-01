@@ -20,7 +20,7 @@ bool BatteryLED::init(void) {
     }
 
 bool BatteryLED::compute(void) {
-	_modules_data.commerror = false;
+	_modules_data.communication = true;
 	
     //check module
     //Serial.println("Check Module");
@@ -29,28 +29,32 @@ bool BatteryLED::compute(void) {
     //locate
     //Serial.println("Locate");
     if (_modules_data.locate)
-        _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, true);
+        _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, true);
     else    
-        _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, false);
+        _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, false);
 
-	//if (_modules_data.commerror)
+	//if (_modules_data.communication)
 	//	return false;
 		
     //soc enabled
     //Serial.println("SOC Enable");
     if (_modules_data.soc_enable)
-        _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, true);
+        _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, true);
     else    
-        _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, false);
+        _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, false);
 
-	//if (_modules_data.commerror)
+	//if (_modules_data.communication)
 	//	return false;
 		
     //soc
     //Serial.println("SOC");
-    _modules_data.commerror = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.soc);
+    _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.soc);
 
-	if (_modules_data.commerror)
+	//charging state
+	//Serial.println("Charging State");
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x07, _modules_data.charge_discharge_state);
+	
+	if (!_modules_data.communication)
 		return false;
 		
     return true;
