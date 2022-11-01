@@ -25,7 +25,12 @@ void loop() {
   batteryLED.setSOCenable(true);
   batteryLED.setSOC((millis()/1000)%100);
   batteryLED.setMaxIntensity(80);
-  batteryLED.setChargingState(OFF);
+  batteryLED.setChargingState(OFF);     //OFF, CHARGING, DISCHARGING
+  batteryLED.setStateColor(0x00);       //0x00 normal, 0x01 off, 0x02 blue, 0x03 green, 0x04 orange, 0x05 red
+  batteryLED.setStateAnimation(0x00);   //0x00 normal, 0x01 static, 0x02 wave up, 0x03 wave down, 0x04 blink
+  batteryLED.setUpdateRate(5);          //ms
+  batteryLED.setWaveRate(30);           //this malue times "setUpdateRate" in ms
+
   batteryLED.compute();
   Serial.println(batteryLED.getCommunicationErrorState());
   Serial.println("");

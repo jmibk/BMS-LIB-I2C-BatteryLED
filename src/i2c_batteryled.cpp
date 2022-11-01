@@ -23,7 +23,7 @@ bool BatteryLED::compute(void) {
 	_modules_data.communication = true;
 		
     //locate
-    if (_modules_data.locate)
+    if (_modules_data.data_locate_enabled)
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, true);
     else    
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x04, false);
@@ -32,7 +32,7 @@ bool BatteryLED::compute(void) {
 	//	return false;
 		
     //soc enabled
-    if (_modules_data.soc_enable)
+    if (_modules_data.data_soc_enabled)
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, true);
     else    
         _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x05, false);
@@ -41,13 +41,19 @@ bool BatteryLED::compute(void) {
 	//	return false;
 		
     //soc
-    _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.soc);
-
+    _modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x06, _modules_data.data_soc);
 	//charging state
-	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x07, _modules_data.charge_discharge_state);
-
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x07, _modules_data.data_charge_discharge_state);
 	//max led intensity
-	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x08, _modules_data.max_intensity);
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x08, _modules_data.data_max_intensity);
+    //state color
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x09, _modules_data.data_state_color);
+    //state animation
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x0A, _modules_data.data_state_animation);
+    //data update rate
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x0B, _modules_data.data_update_rate);
+    //wave update tick rate
+	_modules_data.communication = _writedata(I2C_ADDRESS_LED_MODULE, 0x0C, _modules_data.data_led_wave_rate);
 
 	if (!_modules_data.communication)
 		return false;

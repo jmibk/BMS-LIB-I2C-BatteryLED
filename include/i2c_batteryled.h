@@ -10,6 +10,22 @@ uses i2c channel 0
 #define I2C_SPEED               1000ul
 #define I2C_ADDRESS_LED_MODULE  0x02
 
+/*
+    0,                      //0x00 ping register
+    0,                      //0x01 firmwareVersion 1/100
+    I2C_ADDRESS,            //0x02 i2cAddress
+    0,                      //0x03 config mode
+    0,                      //0x04 locate functionality
+    0,                      //0x05 SOC enabled
+    SOC_THRESHOLD_ERROR+1,  //0x06 SOC
+    0,                      //0x07 charging state: 0 = off, 1 = charging, 2 = discharging
+    MAX_INTENSITY,          //0x08 max intensity
+    2,                      //0x09 state color display (overrides all above): 0x00 normal, 0x01 off, 0x02 blue, 0x03 green, 0x04 orange, 0x05 red
+    2,                      //0x0A state animation display (overrides all above): 0x00 normal, 0x01 static, 0x02 wave up, 0x03 wave down, 0x04 blink
+    UPDATE_RATE,            //0x0B led update rate
+    LED_TICK_THRESHOLD,     //0x0C led wave update rate
+*/
+
 enum chargeDischargeState {
     OFF, CHARGING, DISCHARGING  };
 
@@ -21,19 +37,46 @@ class BatteryLED {
         bool init(int pinSDA, int pinSCL);
         bool init(void); 
         bool compute(void);
-        void setSOCenable(bool value)           			{_modules_data.soc_enable = value;}
-        bool getSOCenable(void)                 			{return _modules_data.soc_enable;}
-        void setSOC(uint8_t value)             				{_modules_data.soc = value;}
-        uint8_t getSOC(void)                   				{return _modules_data.soc;}
+
+
+        uint16_t getFirmwareVersion(void)                   {return _modules_data.data_firmware_version;}
+
+        void setAddress(uint8_t value)             	        {_modules_data.data_i2c_address = value;}
+        uint8_t getAddress(void)                    		{return _modules_data.data_i2c_address;}
+
+        void setConfigMode(bool value)             	        {_modules_data.data_config_mode = value;}
+        bool getConfigMode(void)                    		{return _modules_data.data_config_mode;}	
+
+        void setLocate(bool value)              			{_modules_data.data_locate_enabled = value;}
+        bool getLocate(void)                    			{return _modules_data.data_locate_enabled;}
+
+        void setSOCenable(bool value)           			{_modules_data.data_soc_enabled = value;}
+        bool getSOCenable(void)                 			{return _modules_data.data_soc_enabled;}
+
+        void setSOC(uint8_t value)             				{_modules_data.data_soc = value;}
+        uint8_t getSOC(void)                   				{return _modules_data.data_soc;}
+
 		void setChargingState(chargeDischargeState value)	{
-                                                            if(value == CHARGING) _modules_data.charge_discharge_state = 0x01; 
-																else if (value == DISCHARGING) _modules_data.charge_discharge_state = 0x02;
-																else _modules_data.charge_discharge_state = 0x00;
+                                                            if(value == CHARGING)           _modules_data.data_charge_discharge_state = 0x01; 
+															else if (value == DISCHARGING)  _modules_data.data_charge_discharge_state = 0x02;
+															else                            _modules_data.data_charge_discharge_state = 0x00;
 															}
-        void setLocate(bool value)              			{_modules_data.locate = value;}
-        bool getLocate(void)                    			{return _modules_data.locate;}
-		void setMaxIntensity(uint8_t value)             	{_modules_data.max_intensity = value;}
-        uint8_t getMaxIntensity(void)                   	{return _modules_data.max_intensity;}
+
+		void setMaxIntensity(uint8_t value)             	{_modules_data.data_max_intensity = value;}
+        uint8_t getMaxIntensity(void)                   	{return _modules_data.data_max_intensity;}
+
+        void setStateColor(byte value)             	        {_modules_data.data_config_mode = value;}
+        byte getStateColor(void)                    		{return _modules_data.data_config_mode;}
+
+        void setStateAnimation(byte value)             	    {_modules_data.data_state_animation = value;}
+        byte getStateAnimation(void)                        {return _modules_data.data_state_animation;}
+
+        void setUpdateRate(uint16_t value)             	    {_modules_data.data_update_rate = value;}
+        uint16_t getUpdateRate(void)                    	{return _modules_data.data_update_rate;}
+
+        void setWaveRate(uint16_t value)             	    {_modules_data.data_led_wave_rate = value;}
+        uint16_t getWaveRate(void)                    		{return _modules_data.data_led_wave_rate;}
+
 		bool getCommunicationErrorState(void)				{return _modules_data.communication;}
         uint32_t getCRCerrors(void)             			{return _modules_data.crcerrors;}
 
@@ -44,13 +87,23 @@ class BatteryLED {
         uint16_t _readdata(int i2cAddress, byte i2cRegister);
 
     struct modules_data_struct { 
-        bool            soc_enable = false;                 //soc display enabled
-        uint8_t         soc = 0;                            //soc value [0...100]
-		byte			charge_discharge_state = 0x00;		//0x00 = no charging, 0x01 = charging, 0x02 = discharging
-        bool            locate = false;                     //module locate function
-		byte			max_intensity = 80;					//max intensity of led
-		bool			communication = true;				//communication with board
-        uint32_t        crcerrors = 0;                      //crc communication errors since system start
+
+        uint16_t        data_ping_register;                         //0x00            
+        uint16_t        data_firmware_version;                      //0x01
+        uint8_t         data_i2c_address = I2C_ADDRESS_LED_MODULE;  //0x02
+        bool            data_config_mode = false;                   //0x03
+        bool            data_locate_enabled = false;                //0x04: module locate function
+        bool            data_soc_enabled = false;                   //0x05: soc display enabled
+        uint8_t         data_soc = 0;                               //0x06: soc value [0...100]
+		byte			data_charge_discharge_state = 0x00;         //0x07: 0x00 = no charging, 0x01 = charging, 0x02 = discharging
+		byte			data_max_intensity = 80;			        //0x08: max intensity of led
+        byte            data_state_color = 0x00;                    //0x09: 0x00 normal, 0x01 off, 0x02 blue, 0x03 green, 0x04 orange, 0x05 red
+        byte            data_state_animation = 0x00;                //0x0A: 0x00 normal, 0x01 static, 0x02 wave up, 0x03 wave down, 0x04 blink
+        uint16_t        data_update_rate = 5;                       //0x0B: ms, overall update rate
+        uint16_t        data_led_wave_rate = 30;                    //0x0C: update counter for wave
+
+		bool			communication = true;				        //communication with board
+        uint32_t        crcerrors = 0;                              //crc communication errors since system start
     };
     modules_data_struct _modules_data;
     
